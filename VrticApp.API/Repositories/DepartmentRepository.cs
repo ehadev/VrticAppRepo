@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VrticApp.API.Contexts;
+using VrticApp.API.DTOs.Department;
 using VrticApp.API.Interfaces;
 using VrticApp.API.Models;
 
@@ -9,24 +12,48 @@ namespace VrticApp.API.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        public Task<Department> Add(Department department)
+        private readonly MyContext _context;
+
+        public DepartmentRepository(MyContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<Department>> Get()
+        public async Task<List<Department>> Get()
         {
-            throw new NotImplementedException();
+            return  await _context.Departments.AnyAsync() ?
+                    await _context.Departments.ToListAsync() : null;
         }
 
-        public Task<List<Department>> Get(int id)
+        public async Task<Department> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Departments.AnyAsync() ?
+                   await _context.Departments.Where(x=>x.DepartmentId == id).FirstOrDefaultAsync() : null;
         }
 
-        public Task<Department> Update(int id, Department department)
+        public async Task<Department> Add(Department department)
         {
-            throw new NotImplementedException();
+           await _context.Departments.AddAsync(department);
+           await _context.SaveChangesAsync();
+
+           return await Get(department.DepartmentId);
         }
+
+        public async Task<Department> Update(int id, DepartmentUpdateDTO department)
+        {
+            var departmentDB = await _context.Departments.Where(x => x.DepartmentId == id).FirstOrDefaultAsync();
+
+            if (departmentDB == null)
+                return null;
+
+            departmentDB.Name = department.Name;
+            departmentDB.Description = department.Description;
+            department.IsActive = department.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return await Get(id);
+        }
+       
     }
 }
