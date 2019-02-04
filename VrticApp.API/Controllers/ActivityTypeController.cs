@@ -17,6 +17,7 @@ namespace VrticApp.API.Controllers
         private readonly IActivityTypeRepository _activityType;
         public ActivityTypeController(IActivityTypeRepository activityType)
         {
+            //test
             _activityType = activityType;
         }
 
