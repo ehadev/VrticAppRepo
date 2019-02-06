@@ -11,6 +11,7 @@ namespace VrticApp.API.Repositories
     {
         public Task<KindergartenOffice> Add(KindergartenOffice kindergartenOffice)
         {
+
             throw new NotImplementedException();
         }
 
