@@ -16,7 +16,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using VrticApp.API.Contexts;
+using VrticApp.API.Interfaces;
 using VrticApp.API.Models;
+using VrticApp.API.Repositories;
+using VrticApp.API.UOW;
 
 namespace VrticApp.API
 {
@@ -42,7 +45,21 @@ namespace VrticApp.API
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
             });
+            #region ServiceRegistration
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
+            services.AddScoped<ICostTypeRepository, CostTypeRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IDifficultyLevelRepository, DifficultyLevelRepository>();
+            services.AddScoped<IKindergartenRepository, KindergartenRepository>();
+            services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
+            services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<ISettingsRepository, SettingsRepository>();
+            services.AddScoped<IGradeRepository, GradeRepository>();
+            services.AddScoped<IDifficultyLevelRepository, DifficultyLevelRepository>();
 
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            #endregion
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
             builder.AddEntityFrameworkStores<MyContext>();
             builder.AddRoleValidator<RoleValidator<Role>>();
@@ -60,7 +77,7 @@ namespace VrticApp.API
                 };
             });
 
-
+            
 
             services.AddMvc()
                   .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(opt => {
