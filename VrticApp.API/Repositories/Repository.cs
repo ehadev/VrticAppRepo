@@ -18,6 +18,7 @@ namespace VrticApp.API.Repositories
         }
         public async Task<IEnumerable<TEntity>> GetAll()
         {
+            //test
             return await _context.Set<TEntity>().ToListAsync();
         }
         public async Task<TEntity> Get(int id)
