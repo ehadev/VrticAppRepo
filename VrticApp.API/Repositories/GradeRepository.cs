@@ -1,32 +1,46 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VrticApp.API.Contexts;
+using VrticApp.API.DTOs.Grade;
 using VrticApp.API.Interfaces;
 using VrticApp.API.Models;
 
 namespace VrticApp.API.Repositories
 {
-    public class GradeRepository : IGradeRepository
+    public class GradeRepository : Repository<Grade>, IGradeRepository
     {
-        public Task<Grade> Add(Grade grade)
+        public GradeRepository(MyContext context): base(context)
         {
-            throw new NotImplementedException();
+        }
+      
+        public async Task<Grade> Add(GradeCreateDTO grade)
+        {
+            Grade gObject = new Grade
+            {
+                Name = grade.Name,
+                Description = grade.Description,
+                IsActive = grade.IsActive
+            };
+             _context.Grades.Add(gObject);
+            await _context.SaveChangesAsync();
+            return await Get(grade.GradeId);
+            
         }
 
-        public Task<List<Grade>> Get()
+        public async Task<Grade> Update(int id, GradeUpdateDTO grade)
         {
-            throw new NotImplementedException();
-        }
+            Grade gObject = await _context.Grades.Where(x => x.GradeId == id).FirstOrDefaultAsync();
+            if (gObject == null)
+                return null;
+            gObject.Name = grade.Name;
+            gObject.Description = grade.Description;
+            gObject.IsActive = grade.IsActive;
 
-        public Task<List<Grade>> Get(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Grade> Update(int id, Grade grade)
-        {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
+            return await Get(id);
         }
     }
 }

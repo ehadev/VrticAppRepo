@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VrticApp.API.Contexts;
+using VrticApp.API.DTOs.ActivityType;
 using VrticApp.API.Interfaces;
 using VrticApp.API.Models;
 
@@ -9,24 +12,48 @@ namespace VrticApp.API.Repositories
 {
     public class ActivityTypeRepository : IActivityTypeRepository
     {
-        public Task<ActivityType> Add(ActivityType activityType)
+
+        private readonly MyContext _context;
+
+        public ActivityTypeRepository(MyContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<List<ActivityType>> Get()
+        {
+            return await _context.ActivityTypes.AnyAsync() ? 
+                   await _context.ActivityTypes.ToListAsync() : null;
+                    
         }
 
-        public Task<List<ActivityType>> Get()
+        public async Task<ActivityType> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _context.ActivityTypes.AnyAsync() ?
+                    await _context.ActivityTypes.Where(x => x.ActivityTypeId == id).FirstOrDefaultAsync() : null;
+        }
+        public async Task<ActivityType> Add(ActivityType activityType)
+        {
+            await _context.ActivityTypes.AddAsync(activityType);
+            await _context.SaveChangesAsync();
+
+            return await Get(activityType.ActivityTypeId);
+        }
+        public async Task<ActivityType> Update(int id, ActivityTypeUpdateDTO activityType)
+        {
+            var activityTypeDBId = await _context.ActivityTypes.Where(x => x.ActivityTypeId == id).FirstOrDefaultAsync();
+
+            if (activityTypeDBId == null)
+                return null;
+
+            activityTypeDBId.Name = activityType.Name;
+            activityTypeDBId.Description = activityType.Description;
+            activityTypeDBId.IsActive = activityType.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return await Get(id);
         }
 
-        public Task<List<ActivityType>> Get(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ActivityType> Update(int id, ActivityType activityType)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

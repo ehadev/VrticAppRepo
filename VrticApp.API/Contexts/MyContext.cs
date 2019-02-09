@@ -9,6 +9,7 @@ using VrticApp.API.Models;
 
 namespace VrticApp.API.Contexts
 {
+    //Context Test
     public class MyContext: IdentityDbContext
                             <
                                 User,
