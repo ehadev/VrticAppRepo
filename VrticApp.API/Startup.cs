@@ -47,6 +47,7 @@ namespace VrticApp.API
             });
             #region ServiceRegistration
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
             services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
             services.AddScoped<ICostTypeRepository, CostTypeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
