@@ -16,7 +16,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using VrticApp.API.Contexts;
+using VrticApp.API.Interfaces;
 using VrticApp.API.Models;
+using VrticApp.API.Repositories;
 
 namespace VrticApp.API
 {
@@ -59,6 +61,18 @@ namespace VrticApp.API
                     ValidateAudience = false
                 };
             });
+
+
+            #region SERVICES REGISTRATION
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IDifficultyLevelRepository, DifficultyLevelRepository>();
+
+            #endregion
+
+
+
+
+
 
 
 
