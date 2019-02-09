@@ -40,14 +40,19 @@ namespace VrticApp.API.Controllers
                 return BadRequest();
             return Ok(await _activityType.Add(aType));
         }
-        [HttpPost]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id,ActivityTypeUpdateDTO aType)
         {
-
             if (aType == null)
                 return BadRequest();
 
-            return Ok(await _activityType.Update(id, aType));
+            var activityType = await _activityType.Get(id);
+
+            activityType.Name = aType.Name;
+            activityType.Description = aType.Description;
+            activityType.IsActive = aType.IsActive;
+
+            return Ok(await _activityType.Update(id, activityType));
         }
     }
 }

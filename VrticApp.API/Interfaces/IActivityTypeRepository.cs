@@ -12,6 +12,6 @@ namespace VrticApp.API.Interfaces
         Task<List<ActivityType>> Get();
         Task<ActivityType> Get(int id);
         Task<ActivityType> Add(ActivityType activityType);
-        Task<ActivityType> Update(int id, ActivityTypeUpdateDTO activityType);
+        Task<ActivityType> Update(int id, ActivityType activityType);
     }
 }

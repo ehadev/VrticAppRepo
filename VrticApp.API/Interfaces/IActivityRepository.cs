@@ -8,8 +8,8 @@ namespace VrticApp.API.Interfaces
 {
     public interface IActivityRepository
     {
-        Task<List<Activity>> Get();
-        Task<List<Activity>> Get(int id);
+        Task<IEnumerable<Activity>> Get();
+        Task <Activity> Get(int id);
         Task<Activity> Add(Activity activity);
         Task<Activity> Update(int id, Activity activity);
     }
