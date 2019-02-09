@@ -38,17 +38,12 @@ namespace VrticApp.API.Repositories
 
             return await Get(activityType.ActivityTypeId);
         }
-        public async Task<ActivityType> Update(int id, ActivityTypeUpdateDTO activityType)
+        public async Task<ActivityType> Update(int id, ActivityType activityType)
         {
-            var activityTypeDBId = await _context.ActivityTypes.Where(x => x.ActivityTypeId == id).FirstOrDefaultAsync();
-
-            if (activityTypeDBId == null)
+            if (activityType == null)
                 return null;
 
-            activityTypeDBId.Name = activityType.Name;
-            activityTypeDBId.Description = activityType.Description;
-            activityTypeDBId.IsActive = activityType.IsActive;
-
+            _context.Entry(activityType).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return await Get(id);
