@@ -63,7 +63,7 @@ namespace VrticApp.API.Controllers
             return Ok(await _activityRepository.Add(activity));
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Activity model)
         {
             if (!ModelState.IsValid)
